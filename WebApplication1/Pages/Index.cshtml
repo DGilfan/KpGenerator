@@ -1,0 +1,95 @@
+﻿@page
+@model WebApplication1.Pages.IndexModel
+@{
+    ViewData["Title"] = "Коммерческое приложение от ПБ Kvadrat";
+}
+
+<h2>Форма для КП</h2>
+<div class="text-center">
+    <h1 class="display-4">Коммерческое предложение от проектного бюро "Kvadrat"</h1>
+   
+    <form method="post">
+        <div>
+            <label for="name">ФИО клиента:</label>
+            <input asp-for="Proposal.CustomerName"/>
+        </div>
+
+        <div>
+            <label>Площадь (м²):</label>
+                <input asp-for="Proposal.Area" type="number" step="0.1">
+        </div>
+
+        <div>
+            <label>Нужен дизайн интерьера?</label>
+                <input asp-for="Proposal.Design" type="checkbox">
+        </div>
+
+        <!-- Добавляем radio buttons -->
+        <div>
+            <label>Тип заказчика:</label><br>
+            <label>
+                <input type ="radio" asp-for="Proposal.CustomerType" value="Физическое лицо"/>
+                Физическое лицо
+            </label>
+            <label>
+                <input type="radio" asp-for="Proposal.CustomerType" value="Юридическое лицо" />
+                Юридическое лицо
+            </label>
+        </div>
+
+        <div style="margin-top:10px;">
+            <button type="submit" asp-page-handler="Preview">Предпросмотр</button>
+            <button type="submit" asp-page-handler="Download">Скачать PDF</button>
+            <button type = "submit" asp-page-handler="List">Просмотреть скисок клиентов</button>
+        </div>
+
+        
+    </form>
+
+    <!-- Показать список клиентов из БД -->
+    <button type="button" id="toggleTable">Показать / скрыть список заявок</button>
+    <!-- Скрипт JavaScript -->
+    <script>
+        document.getElementById("toggleTable").addEventListener("click", function() {
+            const table = document.querySelector("table");
+            if (table.style.display === "none") {
+                table.style.display = "table";
+            } else {
+                table.style.display = "none";
+            }
+        });
+    </script>
+
+    @if (!string.IsNullOrEmpty(Model.ResultMessage))
+    {
+        <div style="margin-top:20px; white-space:pre-line; border:1px solid #ccc; padding:10px;">
+            <h3>Предпросмотр:</h3>
+            <p>@Model.ResultMessage</p>
+        </div>
+    }
+
+    <h3>Список клиентов в базе данных</h3>
+    <table style="display:none;">
+        <thead>
+            <tr>
+                <th>ФИО</th>
+                <th>Площадь</th>
+                <th>Дизайн</th>
+                <th>Тип клиента</th>
+                <th>Дата создания</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.AllProposals) //Свойство IndexModel
+            {
+            <tr>
+                <td>@item.CustomerName</td>
+                <td>@item.Area</td>
+                <td>@(item.Design ? "Да" : "Нет")</td>
+                <td>@item.CustomerType</td>
+                <td>@item.CreatedAt?.ToString("dd.MM.yyyy HH:mm")</td>
+            </tr>    
+            }
+        </tbody>
+    </table>
+</div>
