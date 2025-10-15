@@ -34,13 +34,19 @@
 
 KpGenerator/
 ├── WebApplication1/ # Основное веб-приложение
+
 │ ├── Pages/
+
 │ │ ├── Index.cshtml # Главная страница с формой
+
 │ │ ├── Index.cshtml.cs # Логика страницы
+
 │ ├── Models/
+
 │ │ └── ProposalRequest.cs # Модель данных
+
 │ └── wwwroot/ # Статические файлы
-├── .gitignore # Исключённые файлы
+
 └── README.md # Это описание проекта
 
 ---
